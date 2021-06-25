@@ -1,0 +1,25 @@
+from setuptools import setup
+
+setup(name="ssgrab",
+      version="0.0.1",
+      scripts=["bin/ssgrab"],
+      packages=["ssgrab"],
+      description="Get packages from SendSafely",
+      long_description="Get packages from SendSafely",
+      classifiers=["Development Status :: 4 - Beta",
+                   "Intended Audience :: End Users/Desktop",
+                   "License :: OSI Approved :: Apache Software License",
+                   "Topic :: Utilities",
+                   ],
+      keywords="sendsafely",
+      author="Brent Woodruff",
+      author_email="brent@fprimex.com",
+      url="http://github.com/fprimex/ssgrab",
+      license="Apache",
+      include_package_data=True,
+      zip_safe=False,
+      install_requires=[
+        "plac_ini",
+        "SendSafely-Python-API",
+      ],
+      )
