@@ -16,6 +16,8 @@ import json
 import sendsafely
 from sendsafely import SendSafely, Package
 from sendsafely.Progress import Progress
+from sendsafely.exceptions import GetPackageInformationFailedException, \
+                                  DownloadFileException
 
 
 class VerbosePrinter:
@@ -91,8 +93,12 @@ def ssgrab(verbose=False,
     # Configure the SendSafely client
     ss = SendSafely(host, key, secret)
 
-    # Use the provided link to get the attributes of the package
-    pkg_info = ss.get_package_information_from_link(link)
+    try:
+        # Use the provided link to get the attributes of the package
+        pkg_info = ss.get_package_information_from_link(link)
+    except GetPackageInformationFailedException as err:
+        print(f' {err}', file=sys.stderr)
+        return []
 
     # Use the package info together with the keyCode in the link to prepare
     # package variables that will configure the Package object
@@ -122,8 +128,8 @@ def ssgrab(verbose=False,
                     download_directory=work_dir, progress_instance=p)
 
             ss_files.append(name)
-        except sendsafely.exceptions.DownloadFileException as e:
-            print(e)
+        except DownloadFileException as err:
+            print(f' {err}')
 
     return ss_files
 
