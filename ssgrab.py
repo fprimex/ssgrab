@@ -60,7 +60,7 @@ def get_client_secret(link):
 
 
 @plac.annotations(
-    verbose=('verbose output', 'flag', 'v'),
+    verbose=('Verbose output', 'flag', 'v'),
     key=('API key for SendSafely',
              'option', 'k', str, None, 'API_KEY'),
     secret=('API secret for SendSafely',
@@ -71,13 +71,16 @@ def get_client_secret(link):
               'option', 'w', str, None, 'WORK_DIR'),
     link=('SendSafely package to download and decrypt',
               'option', 'l', str, None, 'PACKAGE_LINK'),
+    postmsg=('Message to follow any verbose output (default: "")',
+              'option', None, str, None, 'POSTMSG'),
 )
 def ssgrab(verbose=False,
            key=None,
            secret=None,
            host=None,
            link=None,
-           work_dir=os.path.join(os.path.expanduser('~'), 'ssgrab')):
+           work_dir=os.path.join(os.path.expanduser('~'), 'ssgrab'),
+           postmsg=""):
     "Download packages from SendSafely."
 
     vp = VerbosePrinter(verbose)
@@ -109,6 +112,8 @@ def ssgrab(verbose=False,
       "serverSecret" : pkg_info["serverSecret"],
     }
 
+    vp.print(f' Downloading SendSafely package {pkg_info["packageId"]}{postmsg}')
+
     # Initialize a package, passing the instantiated SendSafely client and all
     # of the objects to refer to an existing package that can be retrieved
     package = Package(ss, package_variables=pkg_vars)
@@ -117,11 +122,11 @@ def ssgrab(verbose=False,
     for f in pkg_info["files"]:
         name = f['fileName']
         if os.path.isfile(os.path.join(work_dir, name)):
-            vp.print(f' SendSafely {name} already present')
+            vp.print(f'  {name} already present')
             continue
 
         try:
-            p = SSGrabProgress(f" Downloading SendSafely {name}", verbose)
+            p = SSGrabProgress(f'  {name}', verbose)
 
             # Go and actually get the file and decrypt it in the destination dir
             package.download_and_decrypt_file(f["fileId"],
@@ -136,4 +141,3 @@ def ssgrab(verbose=False,
 
 def main(argv=None):
     plac_ini.call(ssgrab)
-    return 0
