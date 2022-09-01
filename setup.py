@@ -23,7 +23,7 @@ setup(
                        ],
     install_requires = [
                          "plac_ini",
-                         "SendSafely-Python-API",
+                         "sendsafely",
                        ],
     entry_points     = {
                          'console_scripts': [
