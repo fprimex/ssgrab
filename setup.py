@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name             = "ssgrab",
-    version          = "0.0.2",
+    version          = "0.0.3",
     author           = "Brent Woodruff",
     author_email     = "brent@fprimex.com",
     url              = "http://github.com/fprimex/ssgrab",
